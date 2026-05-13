@@ -1,0 +1,168 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type WhitePatchRegion = 
+ record {
+   avgB: float64;
+   avgG: float64;
+   avgR: float64;
+   height: float64;
+   width: float64;
+   x: float64;
+   y: float64;
+ };
+type WhitePatchInput = 
+ record {
+   height: float64;
+   width: float64;
+   x: float64;
+   y: float64;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Timestamp = int;
+type TextureFeatures = 
+ record {
+   contrast: float64;
+   energy: float64;
+   homogeneity: float64;
+ };
+type SegmentationResult = 
+ record {
+   irisFraction: float64;
+   irisRadiusEstimate: float64;
+   scleraFraction: float64;
+ };
+type ScreeningRecord = 
+ record {
+   id: ScreeningId;
+   imageStorageId: text;
+   result: AnalysisResult;
+   timestamp: Timestamp;
+   userId: principal;
+ };
+type ScreeningId = text;
+type RegionScore = 
+ record {
+   avgB: float64;
+   avgG: float64;
+   avgR: float64;
+   brightness: float64;
+   contrast: float64;
+   edgeFeatures: opt EdgeFeatures;
+   region: text;
+   textureFeatures: opt TextureFeatures;
+ };
+type RegionBox = 
+ record {
+   h: float64;
+   w: float64;
+   x: float64;
+   y: float64;
+ };
+type ImageId = text;
+type FeatureConfidences = 
+ record {
+   color: float64;
+   edge: float64;
+   segmentation: float64;
+   texture: float64;
+ };
+type ExternalBlob = blob;
+type EdgeFeatures = 
+ record {
+   arcusRingScore: float64;
+   edgeDensity: float64;
+   edgeStrength: float64;
+ };
+type DetectedRegions = 
+ record {
+   conjunctiva: RegionBox;
+   cornea: RegionBox;
+   irisRadius: float64;
+   pupilCenter: record {
+                  float64;
+                  float64;
+                };
+   sclera: RegionBox;
+ };
+type ConditionResult = 
+ record {
+   condition: text;
+   conditionConfidence: float64;
+   explanation: text;
+   featureConfidences: FeatureConfidences;
+   riskLevel: text;
+   score: float64;
+ };
+type AnalysisResult = 
+ record {
+   conditions: vec ConditionResult;
+   detectedRegions: opt DetectedRegions;
+   detectionQuality: text;
+   imageId: ImageId;
+   regionScores: vec RegionScore;
+   segmentationResult: opt SegmentationResult;
+   timestamp: Timestamp;
+   whitePatchUsed: WhitePatchRegion;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  analyzeEyeImage: (imageBlob: ExternalBlob, whitePatchRegion:
+   WhitePatchInput) -> (AnalysisResult);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  clearHistory: () -> (bool);
+  deleteScreening: (screeningId: text) -> (bool);
+  generateSummary: (conditions: vec ConditionResult) -> (text);
+  getCallerUserRole: () -> (UserRole) query;
+  getScreening: (screeningId: text) -> (opt ScreeningRecord) query;
+  getScreeningHistory: () -> (vec ScreeningRecord) query;
+  isCallerAdmin: () -> (bool) query;
+  saveScreening: (result: AnalysisResult, imageStorageId: text) -> (text);
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+}

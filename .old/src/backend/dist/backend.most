@@ -1,0 +1,98 @@
+// Version: 1.0.0
+type AnalysisResult__157842152 =
+  {
+    conditions : [ConditionResult__960560937];
+    detectedRegions : ?DetectedRegions__310416513;
+    detectionQuality : Text;
+    imageId : ImageId__216201135;
+    regionScores : [RegionScore__998794614];
+    segmentationResult : ?SegmentationResult__872839410;
+    timestamp : Timestamp__301639476;
+    whitePatchUsed : WhitePatchRegion__620503990
+  };
+type ConditionResult__960560937 =
+  {
+    condition : Text;
+    conditionConfidence : Float;
+    explanation : Text;
+    featureConfidences : FeatureConfidences__941976214;
+    riskLevel : Text;
+    score : Float
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DetectedRegions__310416513 =
+  {
+    conjunctiva : RegionBox__1050951130;
+    cornea : RegionBox__1050951130;
+    irisRadius : Float;
+    pupilCenter : (Float, Float);
+    sclera : RegionBox__1050951130
+  };
+type EdgeFeatures__709880700 =
+  {arcusRingScore : Float; edgeDensity : Float; edgeStrength : Float};
+type FeatureConfidences__941976214 =
+  {color : Float; edge : Float; segmentation : Float; texture : Float};
+type ImageId__216201135 = Text;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type RegionBox__1050951130 = {h : Float; w : Float; x : Float; y : Float};
+type RegionScore__998794614 =
+  {
+    avgB : Float;
+    avgG : Float;
+    avgR : Float;
+    brightness : Float;
+    contrast : Float;
+    edgeFeatures : ?EdgeFeatures__709880700;
+    region : Text;
+    textureFeatures : ?TextureFeatures__913191487
+  };
+type ScreeningId__610957882 = Text;
+type ScreeningRecord__713701353 =
+  {
+    id : ScreeningId__610957882;
+    imageStorageId : Text;
+    result : AnalysisResult__157842152;
+    timestamp : Timestamp__301639476;
+    userId : Principal
+  };
+type SegmentationResult__872839410 =
+  {irisFraction : Float; irisRadiusEstimate : Float; scleraFraction : Float};
+type TextureFeatures__913191487 =
+  {contrast : Float; energy : Float; homogeneity : Float};
+type Timestamp__301639476 = Int;
+type UserRole__1073662873 = {#admin; #guest; #user};
+type WhitePatchRegion__620503990 =
+  {
+    avgB : Float;
+    avgG : Float;
+    avgR : Float;
+    height : Float;
+    width : Float;
+    x : Float;
+    y : Float
+  };
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable screeningCounter : [var Nat];
+  stable screenings :
+    {
+      var root :
+        Node__46230540<ScreeningId__610957882, ScreeningRecord__713701353>;
+      var size : Nat__490723111
+    }
+};

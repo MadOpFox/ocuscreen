@@ -1,0 +1,26 @@
+{
+  "overview": "OcuScreen+ is a research-oriented eye health screening prototype that analyzes eye images to detect early visual indicators of jaundice, anemia, and corneal arcus. It examines the sclera, conjunctiva, and cornea for color patterns, brightness, and contrast — providing numeric risk scores, explainable reasoning, and an optional plain-language AI summary. Supports both anonymous one-time screenings and user accounts with saved history. Export results as PDF or JSON.",
+  "features": [
+    "Upload or camera-capture eye images",
+    "White patch calibration for cross-lighting accuracy",
+    "Sclera, conjunctiva & cornea analysis with numeric scores",
+    "Explainable reasoning for jaundice, anemia, and corneal arcus risk",
+    "Optional LLM-generated plain-language health summary",
+    "PDF and JSON export of full screening reports",
+    "User accounts with full screening history",
+    "Anonymous single-session screening without login",
+    "Non-diagnostic framing with persistent disclaimers"
+  ],
+  "category": "health-wellness",
+  "tags": [
+    "health-screening",
+    "eye-analysis",
+    "image-processing",
+    "research-tool",
+    "explainable-ai",
+    "medical-prototype",
+    "export",
+    "user-accounts"
+  ],
+  "last_updated": "2026-04-21T13:35:55.528Z"
+}
